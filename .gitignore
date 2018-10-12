@@ -3,3 +3,6 @@
 
 #ignorar credentials.json
 credentials.json
+
+#ignorar token.json
+token.json
