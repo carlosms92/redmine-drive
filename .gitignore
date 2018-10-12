@@ -1,0 +1,5 @@
+#ignorar logs
+*.log
+
+#ignorar credentials.json
+credentials.json
