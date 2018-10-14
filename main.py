@@ -36,4 +36,10 @@ if args.password is None:
 
 #SHEETS
 sheetsService = SheetsService()
-sheetsService.dailyUpdateSheet()
+responseUpdate = sheetsService.dailyUpdateSheet()
+updatedRange = responseUpdate['updates']['updatedRange']
+print(updatedRange)
+sheetsService.updateFormatRange(updatedRange)
+#sheetsService.getSpreadsheet()
+
+#sheetsService.getRow()

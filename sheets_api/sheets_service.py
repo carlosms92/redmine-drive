@@ -5,6 +5,7 @@ from googleapiclient.discovery import build
 from httplib2 import Http
 from oauth2client import file, client, tools
 from datetime import date, timedelta
+import json
 
 # If modifying these scopes, delete the file token.json.
 #SCOPES = 'https://www.googleapis.com/auth/spreadsheets.readonly'
@@ -27,6 +28,13 @@ class SheetsService:
         service = build('sheets', 'v4', http=creds.authorize(Http()))
         return service
 
+    def getSpreadsheet(self):
+        ranges = []  # TODO: Update placeholder value.
+        include_grid_data = False  # TODO: Update placeholder value.
+        request = self.service.spreadsheets().get(spreadsheetId=SPREADSHEET_ID, ranges=ranges, includeGridData=include_grid_data)
+        response = request.execute()
+        print(response)
+
     def getSheet(self):
         range = 'Hoja 1!A1:C3'
         result = self.service.spreadsheets().values().get(spreadsheetId=SPREADSHEET_ID,
@@ -40,6 +48,15 @@ class SheetsService:
                 print(row)
                 # Print columns A and E, which correspond to indices 0 and 4.
                 #print('%s, %s' % (row[0], row[1]))
+
+    def getRow(self):
+        result = self.service.spreadsheets().values().get(
+        spreadsheetId=SPREADSHEET_ID, range='Copia de 01/10 a 12/10!B16:G16').execute()
+        row = result.get('values')
+        json_row = json.dumps(row)
+        print(json_row)
+        #numRows = result.get('values') if result.get('values')is not None else 0
+        #print('{0} rows retrieved.'.format(numRows));
 
     def dailyUpdateSheet(self):
         yesterday = date.today() - timedelta(1)
@@ -56,30 +73,56 @@ class SheetsService:
 
         value_range_body = {
             "values": [
+                ["","","","",""],
                 [
                   dateYesterday,
                   "Reunion",
+                  "",
                   "TODOS",
-                  "0,5",
+                  "0.50",
                   "Daily"
                 ],
                 [
                   dateYesterday,
                   "Portales",
+                  "",
                   "IT",
-                  "5",
+                  "5.00",
                   "Soporte #64236 - Club per Voi - Integration"
                 ],
                 [
                   dateYesterday,
                   "Reunion",
+                  "",
                   "IT",
-                  "2,25",
+                  "2.25",
                   "Tareas #64090 - Añadir en la master DB la fecha de modificación de cada campo legal"
                 ]
              ]
         }
 
         request = self.service.spreadsheets().values().append(spreadsheetId=SPREADSHEET_ID, range=range_, valueInputOption=value_input_option, insertDataOption=insert_data_option, body=value_range_body)
+        response = request.execute()
+        return response
+
+    def updateFormatRange(self,range):
+
+        top_header_format = [
+            {'mergeCells': {
+                'mergeType': 'MERGE_ROWS',
+                'range': {
+                    'endColumnIndex': 4,
+                    'endRowIndex': 60,
+                    'sheetId': 'Copia de 01/10 a 12/10',
+                    'startColumnIndex': 2,
+                    'startRowIndex': 12
+                }
+            }}
+        ]
+
+        batch_update_values_request_body = {
+            'requests': top_header_format
+        }
+        request = self.service.spreadsheets().batchUpdate(spreadsheetId=SPREADSHEET_ID, body=batch_update_values_request_body)
         response = request.execute()
         print(response)
