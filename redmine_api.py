@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
 from redminelib import Redmine
 from datetime import date, timedelta
 

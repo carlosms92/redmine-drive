@@ -19,16 +19,17 @@ if args.password is None:
     sys.exit("Es necesario pasar la contraseña de Redmine (option -p)")
 
 #REDMINE
-# redmine = RedmineApi(args.username, args.password)
-# redmine.connect()
-#
-# userId = redmine.getCurrentUserId()
-# dateYesterday = redmine.getYesterdayDate()
-#
-# issues = redmine.getUserIssuesByDate(userId,dateYesterday)
-#
-# for issue in issues:
-#     print(issue.id, " - " , issue.custom_fields[0].value, " - " ,issue.project.name, " - " , issue.subject)
+redmine = RedmineApi(args.username, args.password)
+redmine.connect()
+
+userId = redmine.getCurrentUserId()
+dateYesterday = redmine.getYesterdayDate()
+#dateYesterday = '2018-10-16'
+
+issues = redmine.getUserIssuesByDate(userId,dateYesterday)
+
+#for issue in issues:
+#	print(issue.id, " - " , issue.custom_fields[0].value, " - " ,issue.project.name, " - " , issue.subject)
 
 #DRIVE
 #driveService = DriveService()
@@ -36,10 +37,13 @@ if args.password is None:
 
 #SHEETS
 sheetsService = SheetsService()
-responseUpdate = sheetsService.dailyUpdateSheet()
-updatedRange = responseUpdate['updates']['updatedRange']
+responseUpdateFields = sheetsService.dailyUpdateSheet(issues)
+updatedRange = responseUpdateFields['updates']['updatedRange']
 print(updatedRange)
-sheetsService.updateFormatRange(updatedRange)
-#sheetsService.getSpreadsheet()
+responseUpdateFormat = sheetsService.updateFormatRange(updatedRange)
+print(responseUpdateFormat)
+responseUpdateFormatColumnToNumber = sheetsService.updateFormatColumnToNumber()
+print(responseUpdateFormatColumnToNumber)
 
+#sheetsService.getSpreadsheet()
 #sheetsService.getRow()
