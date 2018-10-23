@@ -4,8 +4,8 @@ from __future__ import print_function
 from googleapiclient.discovery import build
 from httplib2 import Http
 from oauth2client import file, client, tools
-from datetime import date, timedelta
 import json
+import sys
 
 # If modifying these scopes, delete the file token.json.
 #SCOPES = 'https://www.googleapis.com/auth/spreadsheets.readonly'
@@ -36,7 +36,7 @@ class SheetsService:
         include_grid_data = False  # TODO: Update placeholder value.
         request = self.service.spreadsheets().get(spreadsheetId=SPREADSHEET_ID, ranges=ranges, includeGridData=include_grid_data)
         response = request.execute()
-        print(response)
+        return response
 
 
     def getSheet(self):
@@ -61,14 +61,12 @@ class SheetsService:
         #print('{0} rows retrieved.'.format(numRows));
 
 
-    def dailyUpdateSheet(self, issues):
-        yesterday = date.today() - timedelta(1)
-        dateYesterday = yesterday.strftime("%d/%m/%Y")
-        print(dateYesterday)
+    def dailyUpdateSheet(self, issues, updateDate):
+        updateDate = updateDate.strftime("%d/%m/%Y")
         range_ = 'Copia de 01/10 a 12/10!B13'
         value_input_option = 'RAW'
         insert_data_option = 'INSERT_ROWS'
-        value_range_body = self.generateIssuesRequestBody(dateYesterday,issues)
+        value_range_body = self.generateIssuesRequestBody(updateDate,issues)
         request = self.service.spreadsheets().values().append(spreadsheetId=SPREADSHEET_ID, range=range_, valueInputOption=value_input_option, insertDataOption=insert_data_option, body=value_range_body)
         response = request.execute()
         return response
@@ -82,7 +80,11 @@ class SheetsService:
         values.append(dailyRow)
 
         for issue in issues:
-            country = issue.custom_fields[0].value
+            try:
+                country = self.mappingCountryValues(issue.custom_fields[0].value)
+            except: 
+                country = 'TODOS'
+
             project = issue.project.name
             #title = issue.subject
             title = '#' + str(issue.id) + ' - ' + issue.subject
@@ -92,6 +94,14 @@ class SheetsService:
         value_range_body = {"values": values}
         return value_range_body
 
+    def mappingCountryValues(self, value):
+
+        redmineCountryValues = ['ALL','ES','MX','IT','FR','USA']
+
+        if value == 'ALL' or value not in redmineCountryValues:
+            value = 'TODOS'
+
+        return value
 
     def updateFormatRange(self,range):
         top_header_format = [

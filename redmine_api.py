@@ -1,5 +1,3 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
 from redminelib import Redmine
 from datetime import date, timedelta
 
@@ -86,6 +84,7 @@ class RedmineApi:
 	#para sacar los datos de cada taquilla
 
 	# for issue in issues:
-	# 	#ticket - proyecto - titulo - pais
+	# 	#ticket - pais - proyecto - titulo
 	# 	#print(list(issue))
 	# 	print(issue.id, " - " , issue.custom_fields[0].value, " - " ,issue.project.name, " - " , issue.subject)
+
