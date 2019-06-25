@@ -17,7 +17,17 @@ https://developers.google.com/sheets/api/quickstart/python
 
 ### Shell script:
 ```
-$ python main.py -u [redmine username] -p [redmine password]
+$ python main.py --help
+```
+```
+usage: main.py [-h] [-u USERNAME] [-p [PASSWORD]]
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -u USERNAME, --username USERNAME
+                        Redmine user
+  -p [PASSWORD], --password [PASSWORD]
+                        Redmine password
 ```
 
 ### Crontab
