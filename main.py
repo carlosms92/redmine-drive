@@ -10,12 +10,11 @@ class Password(argparse.Action):
     def __call__(self, parser, namespace, values, option_string):
         if values is None:
             values = getpass.getpass()
- 
+
         setattr(namespace, self.dest, values)
 
 parser = argparse.ArgumentParser()
 parser.add_argument("-u", "--username", help="Redmine user")
-#parser.add_argument("-p", "--password", help="Redmine password")
 parser.add_argument("-p", "--password", action=Password, nargs="?", dest="password", help='Redmine password')
 
 args = parser.parse_args()
@@ -33,14 +32,14 @@ redmine.connect()
 
 userId = redmine.getCurrentUserId()
 dateYesterday = redmine.getYesterdayDate()
-#dateYesterday = '2018-10-23'
+#dateYesterday = '2019-06-24'
 
 issues = redmine.getUserIssuesByDate(userId,dateYesterday)
 
 #for issue in issues:
-	#print(list(issue))
-	#print(issue.id, " - " , issue.custom_fields[0].value, " - " ,issue.project.name, " - " , issue.subject)
-
+#	print(list(issue))
+#	print(issue.id, " - " , issue.custom_fields[0].value, " - " ,issue.project.name, " - " , issue.subject)
+#sys.exit(0)
 
 #SHEETS
 updateDate = datetime.strptime(dateYesterday,"%Y-%m-%d")
@@ -58,8 +57,8 @@ updatedRange = responseUpdateFields['updates']['updatedRange']
 print(updatedRange)
 responseUpdateFormat = sheetsService.updateFormatRange(updatedRange)
 print(responseUpdateFormat)
-responseUpdateFormatColumnToNumber = sheetsService.updateFormatColumnToNumber()
-print(responseUpdateFormatColumnToNumber)
+#responseUpdateFormatColumnToNumber = sheetsService.updateFormatColumnToNumber()
+#print(responseUpdateFormatColumnToNumber)
 
 #sheetsService.getSpreadsheet()
 #sheetsService.getRow()

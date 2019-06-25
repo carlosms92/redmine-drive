@@ -6,3 +6,6 @@ credentials.json
 
 #ignorar token.json
 token.json
+
+#ignorar phpstorm files
+.idea/*

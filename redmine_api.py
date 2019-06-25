@@ -87,4 +87,3 @@ class RedmineApi:
 	# 	#ticket - pais - proyecto - titulo
 	# 	#print(list(issue))
 	# 	print(issue.id, " - " , issue.custom_fields[0].value, " - " ,issue.project.name, " - " , issue.subject)
-

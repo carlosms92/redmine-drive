@@ -10,7 +10,14 @@ import sys
 # If modifying these scopes, delete the file token.json.
 #SCOPES = 'https://www.googleapis.com/auth/spreadsheets.readonly'
 SCOPES = 'https://www.googleapis.com/auth/spreadsheets'
-SPREADSHEET_ID = '1tp8u2vCN94uCPra4rOarjCuhJcqqVi7PgWBq-IXpqRY'
+#2018
+#SPREADSHEET_ID = '11rIE8mJIsOvMHLGS5JyQBMpe63MH5ZKvU2k_ia0Pwh4'
+#2019
+SPREADSHEET_ID = '1bffB0S-EXF7MZ9Fh8RXyBSMeRzcfZsAfo3sD7DtYe1U'
+#24/06 a 05/07
+SHEET_ID = '1324422097'
+#24/06 a 05/07
+DAILY_UPDATE_RANGE = '24/06 a 05/07!B13'
 
 class SheetsService:
 
@@ -63,8 +70,8 @@ class SheetsService:
 
     def dailyUpdateSheet(self, issues, updateDate):
         updateDate = updateDate.strftime("%d/%m/%Y")
-        range_ = 'Copia de 01/10 a 12/10!B13'
-        value_input_option = 'RAW'
+        range_ = DAILY_UPDATE_RANGE
+        value_input_option = 'USER_ENTERED'
         insert_data_option = 'INSERT_ROWS'
         value_range_body = self.generateIssuesRequestBody(updateDate,issues)
         request = self.service.spreadsheets().values().append(spreadsheetId=SPREADSHEET_ID, range=range_, valueInputOption=value_input_option, insertDataOption=insert_data_option, body=value_range_body)
@@ -74,15 +81,15 @@ class SheetsService:
 
     def generateIssuesRequestBody(self, date, issues):
         values = []
-        emptyRow = ["","","","","",""]
-        dailyRow = [date,"Reunion","","TODOS","0,50","Daily"]
-        values.append(emptyRow)
+        #emptyRow = ["","","","","",""]
+        dailyRow = [date,"Reunion","","TODOS","0.50","Daily"]
+        #values.append(emptyRow)
         values.append(dailyRow)
 
         for issue in issues:
             try:
                 country = self.mappingCountryValues(issue.custom_fields[0].value)
-            except: 
+            except:
                 country = 'TODOS'
 
             project = issue.project.name
@@ -110,7 +117,7 @@ class SheetsService:
                 'range': {
                     'endColumnIndex': 4,
                     'endRowIndex': 60,
-                    'sheetId': '2027973397',
+                    'sheetId': SHEET_ID,
                     'startColumnIndex': 2,
                     'startRowIndex': 12
                 }
@@ -128,17 +135,21 @@ class SheetsService:
         top_header_format = [
             {"repeatCell": {
                 "range": {
-                  "sheetId": '2027973397',
+                  "sheetId": SHEET_ID,
                   "startRowIndex": 12,
                   "endRowIndex": 60,
                   "startColumnIndex": 5,
                   "endColumnIndex": 6
                 },
                 "cell": {
+                  "userEnteredValue": {
+                    "stringValue": "1000"
+                  },
+                  "formattedValue": "1000",
                   "userEnteredFormat": {
                     "numberFormat": {
                       "type": "NUMBER",
-                      "pattern": "#0.00"
+                      "pattern": "#.##"
                     }
                   }
                 },
