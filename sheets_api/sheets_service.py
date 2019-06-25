@@ -6,6 +6,7 @@ from httplib2 import Http
 from oauth2client import file, client, tools
 import json
 import sys
+import os
 
 # If modifying these scopes, delete the file token.json.
 #SCOPES = 'https://www.googleapis.com/auth/spreadsheets.readonly'
@@ -22,12 +23,14 @@ DAILY_UPDATE_RANGE = '24/06 a 05/07!B13'
 class SheetsService:
 
     def __init__(self):
+        self.folder = os.path.dirname(os.path.abspath(__file__))
         self.service = self.getAuthentication()
 
 
     def getAuthentication(self):
         #store = file.Storage('token.json')
-        store = file.Storage('sheets_api/token.json')
+        #store = file.Storage('sheets_api/token.json')
+        store = file.Storage(os.path.join(self.folder, 'token.json'))
         creds = store.get()
         if not creds or creds.invalid:
             #flow = client.flow_from_clientsecrets('credentials.json', SCOPES)

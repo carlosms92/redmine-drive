@@ -19,3 +19,13 @@ https://developers.google.com/sheets/api/quickstart/python
 ```
 $ python main.py -u [redmine username] -p [redmine password]
 ```
+
+### Crontab
+```
+$ crontab -e
+```
+Add shell script.
+Example: Execution at 9:00 Monday-Friday
+```
+0 9 * * 1-5 /usr/bin/python [path-to-project]/redmine-sheet/main.py -u [redmine username] -p [redmine password] > /tmp/resultCron.log 2>&1
+```
