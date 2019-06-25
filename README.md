@@ -1,4 +1,6 @@
-# redmine-drive
+# redmine-sheet
+
+Get issues from Redmine and update google sheets.
 
 ## Installation
 
@@ -17,4 +19,3 @@ https://developers.google.com/sheets/api/quickstart/python
 ```
 $ python main.py -u [redmine username] -p [redmine password]
 ```
-
