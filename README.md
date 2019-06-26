@@ -1,4 +1,4 @@
-# redmine-sheet
+# redmine-spreadsheet
 
 Get issues from Redmine and update google sheets.
 
