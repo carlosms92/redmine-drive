@@ -1,11 +1,16 @@
-#ignorar logs
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+#ignore logs
 *.log
 
-#ignorar credentials.json
+#ignore credentials.json
 credentials.json
 
-#ignorar token.json
+#ignore token.json
 token.json
 
-#ignorar phpstorm files
+#ignore phpstorm files
 .idea/*
