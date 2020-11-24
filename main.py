@@ -32,14 +32,14 @@ redmine.connect()
 
 userId = redmine.getCurrentUserId()
 dateYesterday = redmine.getYesterdayDate()
-#dateYesterday = '2019-06-24'
+dateYesterday = '2020-11-03'
 
 issues = redmine.getUserIssuesByDate(userId,dateYesterday)
 
-#for issue in issues:
-#	print(list(issue))
-#	print(issue.id, " - " , issue.custom_fields[0].value, " - " ,issue.project.name, " - " , issue.subject)
-#sys.exit(0)
+# for issue in issues:
+#     print(list(issue))
+#     print(issue.id, " - ", issue.custom_fields[0].value, " - ", issue.project.name, " - ", issue.subject)
+# sys.exit(0)
 
 #SHEETS
 updateDate = datetime.strptime(dateYesterday,"%Y-%m-%d")

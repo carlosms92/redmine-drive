@@ -2,23 +2,21 @@
 # -*- coding: utf-8 -*-
 from __future__ import print_function
 from googleapiclient.discovery import build
-from httplib2 import Http
-from oauth2client import file, client, tools
-import json
-import sys
-import os
+from google_auth_oauthlib.flow import InstalledAppFlow
+from google.auth.transport.requests import Request
+import pickle, json, sys, os
 
-# If modifying these scopes, delete the file token.json.
-#SCOPES = 'https://www.googleapis.com/auth/spreadsheets.readonly'
+# If modifying these scopes, delete the file token.pickle
 SCOPES = 'https://www.googleapis.com/auth/spreadsheets'
-#2018
-#SPREADSHEET_ID = '11rIE8mJIsOvMHLGS5JyQBMpe63MH5ZKvU2k_ia0Pwh4'
-#2019
-SPREADSHEET_ID = '1bffB0S-EXF7MZ9Fh8RXyBSMeRzcfZsAfo3sD7DtYe1U'
+
+#2020
+SPREADSHEET_ID = '1PqPNGfwI5sCOO4_63xTreFrZupuLXXdO8kv_8nCgpvs'
 #24/06 a 05/07
-SHEET_ID = '1324422097'
+#SHEET_ID = '1324422097'
+SHEET_ID = '489188953'
 #24/06 a 05/07
-DAILY_UPDATE_RANGE = '24/06 a 05/07!B13'
+#DAILY_UPDATE_RANGE = '24/06 a 05/07!B13'
+DAILY_UPDATE_RANGE = 'test!B13'
 
 class SheetsService:
 
@@ -26,20 +24,28 @@ class SheetsService:
         self.folder = os.path.dirname(os.path.abspath(__file__))
         self.service = self.getAuthentication()
 
-
     def getAuthentication(self):
-        #store = file.Storage('token.json')
-        #store = file.Storage('sheets_api/token.json')
-        store = file.Storage(os.path.join(self.folder, 'token.json'))
-        creds = store.get()
-        if not creds or creds.invalid:
-            #flow = client.flow_from_clientsecrets('credentials.json', SCOPES)
-            flow = client.flow_from_clientsecrets('sheets_api/credentials.json', SCOPES)
-            creds = tools.run_flow(flow, store)
-
-        service = build('sheets', 'v4', http=creds.authorize(Http()))
+        creds = None
+        # The file token.pickle stores the user's access and refresh tokens, and is
+        # created automatically when the authorization flow completes for the first
+        # time.
+        if os.path.exists('token.pickle'):
+            with open('token.pickle', 'rb') as token:
+                creds = pickle.load(token)
+        # If there are no (valid) credentials available, let the user log in.
+        if not creds or not creds.valid:
+            if creds and creds.expired and creds.refresh_token:
+                creds.refresh(Request())
+            else:
+                flow = InstalledAppFlow.from_client_secrets_file(
+                    'sheets_api/credentials.json', SCOPES)
+                creds = flow.run_local_server(port=0)
+            # Save the credentials for the next run
+            with open('token.pickle', 'wb') as token:
+                pickle.dump(creds, token)
+        
+        service = build('sheets', 'v4', credentials=creds)
         return service
-
 
     def getSpreadsheet(self):
         ranges = []  # TODO: Update placeholder value.

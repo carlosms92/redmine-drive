@@ -9,8 +9,9 @@ __pycache__/
 #ignore credentials.json
 credentials.json
 
-#ignore token.json
+#ignore token
 token.json
+token.pickle
 
 #ignore phpstorm files
 .idea/*
